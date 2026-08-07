@@ -17,6 +17,7 @@ def disorder_grad(x: np.ndarray) -> np.ndarray:
         s = np.sign(np.diff(x))
         g[:-1] -= s
         g[1:] += s
+        
     return g
 
 """Tiny-Torch compliant implementation of loss function (must be moved on framework repo as soon as possible)"""
