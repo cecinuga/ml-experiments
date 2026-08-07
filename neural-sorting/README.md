@@ -29,8 +29,5 @@ Classic SGD is used.
 The whole training process consist in minimizing the `loss function` (entropy) of the given list of numbers, the model will learn the optimal configuration of that list where disorder is minimized, so the numbers will be sorted in ascending or descending order depending on the `minimum` value of the loss function.
 
 
-### Learning
-Un-supervised learning is used, the model will learn to reduce entropy of the given list of numbers.
-
 ### Tech stack
 [TinyTorch](https://github.com/cecinuga/tiny-torch) is used (thorcino on pypi), my custom deep learning framework, build on top of Numpy.

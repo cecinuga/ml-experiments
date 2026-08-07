@@ -11,6 +11,14 @@ def disorder(x: np.ndarray) -> float:
     
     return np.sum(np.abs(np.diff(x))) 
 
+def disorder_grad(x: np.ndarray) -> np.ndarray:
+    g = np.zeros_like(x)
+    if len(x) >= 1:
+        s = np.sign(np.diff(x))
+        g[:-1] -= s
+        g[1:] += s
+    return g
+
 """Tiny-Torch compliant implementation of loss function (must be moved on framework repo as soon as possible)"""
 
 from typing import override
@@ -21,8 +29,11 @@ from thorcino.losses import Loss
 class DisorderLossBackward(Function):
     @override
     def apply(self, grad_output: Tensor) -> tuple[Tensor, ...]:
+        pred, targ = self.saved_tensors
+        grad_pred = grad_output.data * disorder_grad(pred.data)
+        grad_targ = -grad_output.data * disorder_grad(targ.data)
 
-        return Tensor(),
+        return Tensor(grad_pred), Tensor(grad_targ),
 
 class DisorderLoss(Loss):
     grad_fn:type[Function] = DisorderLossBackward
