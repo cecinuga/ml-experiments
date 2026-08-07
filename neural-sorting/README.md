@@ -12,13 +12,14 @@ In a first version the neural network will capable to work with fixed length arr
 Nisba
 
 
-### Loss Function
+### Loss function
 The loss function compute the total entropy of a list of numbers. The entropy is calculated using the formula:
 
-`loss(x) = sum(x_i - x_(i-1))`
+`loss(x) = sum(|x_i - x_(i-1)|)`
 
-There are two types of `minimum` value that the function can reach: when the `minimum > 0` the list of numbers will be sorted in ascending order, and when the `minimum < 0` the list of numbers will be sorted in descending order.
+The loss is numerically verified in the notebook.
 
+In which order sorting can be done, is still under discussion, i think in how is loss computed, if the loss is computed from left to right the model will learn to sort in ascending order, if the loss is computed from right to left the model will learn to sort in descending order.
 
 ### Optimizer
 Classic SGD is used.
@@ -30,3 +31,6 @@ The whole training process consist in minimizing the `loss function` (entropy) o
 
 ### Learning
 Un-supervised learning is used, the model will learn to reduce entropy of the given list of numbers.
+
+### Tech stack
+[TinyTorch](https://github.com/cecinuga/tiny-torch) is used (thorcino on pypi), my custom deep learning framework, build on top of Numpy.
