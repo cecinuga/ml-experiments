@@ -17,7 +17,7 @@ def disorder_grad(x: np.ndarray) -> np.ndarray:
         s = np.sign(np.diff(x))
         g[:-1] -= s
         g[1:] += s
-        
+
     return g
 
 """Tiny-Torch compliant implementation of loss function (must be moved on framework repo as soon as possible)"""
@@ -31,8 +31,12 @@ class DisorderLossBackward(Function):
     @override
     def apply(self, grad_output: Tensor) -> tuple[Tensor, ...]:
         pred, targ = self.saved_tensors
-        grad_pred = grad_output.data * disorder_grad(pred.data)
-        grad_targ = -grad_output.data * disorder_grad(targ.data)
+
+        u = disorder(pred.data) - disorder(targ.data)
+        s = np.sign(u)
+
+        grad_pred = grad_output.data * s * disorder_grad(pred.data)
+        grad_targ = -grad_output.data * s * disorder_grad(targ.data)
 
         return Tensor(grad_pred), Tensor(grad_targ),
 
@@ -44,6 +48,6 @@ class DisorderLoss(Loss):
         pred_disorder = disorder(predictions)
         targ_disorder = disorder(targets)
 
-        out = Tensor(pred_disorder - targ_disorder)
+        out = Tensor(np.abs(pred_disorder - targ_disorder))
         out._grad_fn = self.grad_fn(predictions, targets)
         return out
