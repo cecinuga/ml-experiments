@@ -9,7 +9,7 @@ def disorder(x: np.ndarray) -> float:
     """Base case: a vector with lenth 1 has no disorder."""
     if len(x) == 1: return 0
     
-    return sum([abs(x[i] - x[i-1]) for i in range(1, len(x))])
+    return np.sum(np.abs(np.diff(x))) 
 
 """Tiny-Torch compliant implementation of loss function (must be moved on framework repo as soon as possible)"""
 
@@ -29,6 +29,9 @@ class DisorderLoss(Loss):
 
     @override
     def forward(self, predictions: Tensor, targets: Tensor) -> Tensor:
-        out = Tensor()
+        pred_disorder = disorder(predictions)
+        targ_disorder = disorder(targets)
+
+        out = Tensor(pred_disorder - targ_disorder)
         out._grad_fn = self.grad_fn(predictions, targets)
         return out
