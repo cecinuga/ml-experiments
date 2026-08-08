@@ -1,7 +1,7 @@
 
 from typing import override
 from thorcino.tensor import Tensor
-from thorcino.autograd import Function
+from thorcino.autograd import Function, SubBackward, SumBackward
 from thorcino.losses import Loss
 import numpy as np
 
@@ -45,6 +45,15 @@ def disorder_test(row: int, length_upto: list[int], seed: float) -> None:
                 print(f"random={x}")
                 print(f"sorted={y}")
                 raise e
+            
+"""Loss function for disorder V2: Computing the whole difference matrix"""
+def disorder_v2(x: np.ndarray) -> np.ndarray:
+    assert len(x) > 0
+
+    """Base case: a vector with lenth 1 has no disorder."""
+    if len(x) == 1: return np.array([0])
+
+
 
 
 """Tiny-Torch compliant implementation of loss function (must be moved on framework repo as soon as possible)"""
