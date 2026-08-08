@@ -28,16 +28,16 @@ class PermutationLossBackward(Function):
         pred, targ = self.saved_tensors
 
 
-        return Tensor(grad_pred), Tensor(grad_targ),
+        return Tensor(), Tensor(),
 
 class PermutationLoss(Loss):
     grad_fn:type[Function] = PermutationLossBackward
 
     @override
     def forward(self, predictions: Tensor, targets: Tensor) -> Tensor:
-        pred_perm = perm_matrix(predictions)
+        
 
-        out = Tensor(np.abs(pred_disorder - targ_disorder))
+        out = Tensor()
         out._grad_fn = self.grad_fn(predictions, targets)
         return out
     
